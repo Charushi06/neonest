@@ -20,6 +20,7 @@ const tabs = [
   { label: "sleep", path: "/Sleep" },
   { label: "medical", path: "/Medical" },
   { label: "essentials", path: "/Essentials" },
+  { label: "smart care", path: "/SmartCare" },
   { label: "memories", path: "/Memories" },
   { label: "resources", path: "/Resources" },
   { label: "faqs", path: "/Faqs" },
@@ -30,7 +31,7 @@ const Navbar = () => {
   const pathname = usePathname();
   const router = useRouter();
   const { isAuth, logout } = useAuth();
-  const {setAutoTask,isAutoTask} = useAutoTask()
+  const { setAutoTask, isAutoTask } = useAutoTask();
 
   const [showModal, setShowModal] = useState(false);
   const [progress, setProgress] = useState(100);
@@ -107,8 +108,15 @@ const Navbar = () => {
             {/* Nav - Desktop */}
             <nav className="hidden xl:flex items-center gap-4">
               {tabs.map(({ label, path }) => (
-                <Link key={label} href={path} className={`transition-colors capitalize ${pathname === path ? "text-pink-600" : "text-gray-600 hover:text-pink-600"}`}>
-                  {label}
+                <Link key={label} href={path} className={`relative transition-colors capitalize flex items-center gap-1 ${pathname === path ? "text-pink-600" : "text-gray-600 hover:text-pink-600"}`}>
+                  {label === "smart care" ? (
+                    <>
+                      <span className="capitalize">Smart Care</span>
+                      <span className="absolute top-0 right-[-6px] w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                    </>
+                  ) : (
+                    label
+                  )}
                 </Link>
               ))}
             </nav>
@@ -117,7 +125,7 @@ const Navbar = () => {
             <div className="hidden md:flex items-center space-x-2">
               {isAuth && <NotificationBell />}
               <Chatbot />
-              <AutoTask setAutoTask={setAutoTask} isAutoTask={isAutoTask}/>
+              <AutoTask setAutoTask={setAutoTask} isAutoTask={isAutoTask} />
               {!isAuth ? (
                 <>
                   <Button asChild className="bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white">
@@ -144,8 +152,15 @@ const Navbar = () => {
                     key={label}
                     href={path}
                     onClick={() => setMenuOpen(false)}
-                    className={`block capitalize px-3 py-2 rounded-md text-sm ${pathname === path ? "text-pink-600 font-medium" : "text-gray-700 hover:text-pink-600"}`}>
-                    {label}
+                    className={`relative flex items-center gap-1 capitalize px-3 py-2 rounded-md text-sm ${pathname === path ? "text-pink-600 font-medium" : "text-gray-700 hover:text-pink-600"}`}>
+                    {label === "smart care" ? (
+                      <>
+                        🤖 <span className="capitalize">Smart Care</span>
+                        <span className="absolute top-1 right-0 w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                      </>
+                    ) : (
+                      label
+                    )}
                   </Link>
                 ))}
               </div>
@@ -174,13 +189,13 @@ const Navbar = () => {
         </div>
         <div className=" md:hidden absolute right-0 flex justify-end top-[50vh] items-end">
           <div className="m-4 bg-[#8882] transition-all duration-200 rounded-full shadow-xl">
-            { !(pathname==="/NeonestAi") &&
-            <div className="m-1 mb-3  border-white rounded-full border-2">
-              <Chatbot />
-            </div>
-            }
+            {!(pathname === "/NeonestAi") && (
+              <div className="m-1 mb-3  border-white rounded-full border-2">
+                <Chatbot />
+              </div>
+            )}
             <div className="m-1 border-white rounded-full border-2">
-              <AutoTask setAutoTask={setAutoTask} isAutoTask={isAutoTask}/>
+              <AutoTask setAutoTask={setAutoTask} isAutoTask={isAutoTask} />
             </div>
           </div>
         </div>
